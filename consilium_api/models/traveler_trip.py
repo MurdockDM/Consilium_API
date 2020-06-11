@@ -1,10 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from .traveler import Traveler
+from .trip import Trip
 
 
-class Traveler(models.Model):
+class Traveler_Trip(models.Model):
 
-    user = models.OneToOneField(User, related_name='traveler', on_delete=models.CASCADE)
-    home_city = models.CharField(max_length=75)
-    home_state = models.CharField(max_length=75)
+    traveler = models.ForeignKey(Traveler, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    created_trip = models.BooleanField()
     
