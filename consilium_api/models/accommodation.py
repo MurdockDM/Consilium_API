@@ -12,5 +12,5 @@ class Accommodation(models.Model):
     checkout_date = models.DateField()
     capacity = models.IntegerField(null=True, blank=True)
     booked = models.BooleanField()
-    room = models.ForeignKey(Room, on_delete=)
+    room = models.ForeignKey(Room, on_delete=models.PROTECT)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
