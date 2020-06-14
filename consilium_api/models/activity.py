@@ -5,10 +5,10 @@ from .traveler import Traveler
 
 class Activity(models.Model):
 
-    name = models.CharField()
-    address = models.CharField()
-    city = models.CharField()
-    state = models.CharField()
+    name = models.CharField(max_length=900)
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=50)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     traveler = models.ForeignKey(Traveler, on_delete=models.CASCADE)
 

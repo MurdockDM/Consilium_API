@@ -16,7 +16,7 @@ class TravelerSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'home_city', 'home_state', 'user')
-        depth = 1
+        
 
 
 class Travelers(ViewSet):

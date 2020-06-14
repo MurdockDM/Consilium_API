@@ -25,9 +25,12 @@ from consilium_api.models import *
 
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'travelers', Travelers, 'travelers')
+router.register(r'travelers', Travelers, 'traveler')
 router.register(r'users', Users, 'user')
-
+router.register(r'accommodations', Accommodations, 'accommodation')
+router.register(r'rooms', Rooms, 'room')
+router.register(r'trips', Trips, 'trip')
+router.register(r'travelertrips', TravelerTrips, 'travelertrip')
 
 urlpatterns = [
     path('', include(router.urls)),
