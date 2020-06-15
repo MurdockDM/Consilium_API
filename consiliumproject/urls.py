@@ -31,6 +31,9 @@ router.register(r'accommodations', Accommodations, 'accommodation')
 router.register(r'rooms', Rooms, 'room')
 router.register(r'trips', Trips, 'trip')
 router.register(r'travelertrips', TravelerTrips, 'travelertrip')
+router.register(r'friends', Friends, 'friend')
+router.register(r'flights', Flights, 'flight')
+router.register(r'activities', Activities, 'activity')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -4,3 +4,6 @@ from .trip import Trips
 from .user import Users
 from .accommodation import Accommodations
 from .room import Rooms
+from .friend import Friends
+from .flight import Flights
+from .activity import Activities
