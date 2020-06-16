@@ -32,7 +32,6 @@ def register_user(request):
             user=new_user,
             home_city = req_body['home_city'],
             home_state = req_body['home_state'],
-            trip = req_body['trip']
         )
 
         # Commit the user to the database by saving it
