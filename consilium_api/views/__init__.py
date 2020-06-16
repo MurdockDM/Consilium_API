@@ -7,3 +7,5 @@ from .room import Rooms
 from .friend import Friends
 from .flight import Flights
 from .activity import Activities
+from .login import login_user
+from .register import register_user
