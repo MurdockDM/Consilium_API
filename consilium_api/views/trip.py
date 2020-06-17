@@ -1,22 +1,24 @@
 from django.http import HttpResponseServerError
+from django.contrib.auth.models import User
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from consilium_api.models import Trip
+from .user import UserSerializer
+from consilium_api.models import Trip, Friend, Traveler
 
 
 
 class TripSerializer(serializers.HyperlinkedModelSerializer):
 
-
+    
     class Meta:
         model = Trip
         url = serializers.HyperlinkedIdentityField(
             view_name = 'trip',
             lookup_field = 'id'
         )
-        fields = ('id', 'city', 'state', 'country', 'start_date', 'end_date')
+        fields = ('id', 'city', 'state', 'country', 'start_date', 'end_date', 'traveler_on_trip')
         depth = 1
 
 class Trips(ViewSet):
@@ -67,7 +69,18 @@ class Trips(ViewSet):
 
     def list(self, request):
 
-        trips = Trip.objects.all()
+        
+        
+        friendstrips = self.request.query_params.get('friendstrips', None)
+        
 
-        serializer = TripSerializer(trips, many=True, context={'request': request})
+        if friendstrips is not None:
+            user = self.request.user
+            traveler = Traveler.objects.get(user_id = user.id)
+            friends = Friend.objects.filter(current_user=traveler, request_accepted=True)
+            all_trips = Trip.objects.filter(traveler_on_trip__id__in = friends)
+        else:
+            all_trips = Trip.objects.all()    
+        
+        serializer = TripSerializer(all_trips, many=True, context={'request': request})
         return Response(serializer.data)            
