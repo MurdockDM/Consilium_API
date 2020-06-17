@@ -28,8 +28,8 @@ class Friends(ViewSet):
         return Response(serializer.data)
 
     def list(self, request):
-
-        friends = Friend.objects.all()
+        user = self.request.user
+        friends = Friend.objects.filter(current_user=user, request_accepted=True)
         serializer = FriendSerializer(
             friends, many=True, context={'request': request})
 

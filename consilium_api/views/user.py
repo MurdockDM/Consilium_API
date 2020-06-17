@@ -8,14 +8,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     
     class Meta:
         model = User
-        exclude = ['password']
+        # exclude = ('password',)
         url = serializers.HyperlinkedIdentityField(
             view_name='user',
             lookup_field='id'
         )
 
-        # fields = ('id', 'first_name', 'last_name', 'url')
-
+        # fields = ('id', 'first_name', 'last_name', 'url', 'password')
+        fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
 class Users(ViewSet):
 
     def list(self, request):

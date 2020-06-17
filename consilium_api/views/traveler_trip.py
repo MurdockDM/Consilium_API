@@ -3,18 +3,20 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from consilium_api.models import Traveler_Trip, Traveler, Trip
+from .user import UserSerializer
+from .traveler import TravelerSerializer
+from consilium_api.models import TravelerTrip, Traveler, Trip
 
 class TravelerTripSerializer(serializers.HyperlinkedModelSerializer):
-
+    traveler = TravelerSerializer(many=False)
     class Meta:
-        model = Traveler_Trip
+        model = TravelerTrip
         url = serializers.HyperlinkedIdentityField(
             view_name='traveler_trip',
             lookup_field='id'
         )
         fields = ('id', 'traveler', 'trip', 'created_trip')
-        depth = 1
+        depth = 2
 
 class TravelerTrips(ViewSet):
 
@@ -22,7 +24,7 @@ class TravelerTrips(ViewSet):
 
         traveler = Traveler.objects.get(user_id=request.auth.user.id)
 
-        new_traveler_trip = Traveler_Trip()
+        new_traveler_trip = TravelerTrip()
         new_traveler_trip.traveler_id = Traveler.objects.get(user_id=request.auth.user.id)
         new_traveler_trip.trip_id = request.data['trip_id']  
 
@@ -33,7 +35,14 @@ class TravelerTrips(ViewSet):
 
     def list(self, request):
 
-        traveler_trips = Traveler_Trip.objects.all()
+        yourtrips = self.request.query_params.get('yourtrips', None)
+
+        if yourtrips is not None:
+            traveler = Traveler.objects.get(user = self.request.user)
+            traveler_trips = TravelerTrip.objects.filter(traveler_id = traveler, created_trip=True)
+        else:
+            traveler_trips = TravelerTrip.objects.all()
+
         serializer = TravelerTripSerializer(
             traveler_trips, many=True, context={'request': request}
         )

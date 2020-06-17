@@ -3,6 +3,6 @@ from .activity import Activity
 from .flight import Flight
 from .room import Room
 from .traveler import Traveler
-from .traveler_trip import Traveler_Trip
+from .traveler_trip import TravelerTrip
 from .trip import Trip
 from .friend import Friend

@@ -1,5 +1,5 @@
 from django.db import models
-# from .traveler_trip import Traveler_Trip
+from .traveler import Traveler
 
 class Trip(models.Model):
 
@@ -8,7 +8,7 @@ class Trip(models.Model):
     country = models.CharField(max_length=150)
     start_date = models.DateField()
     end_date = models.DateField()
-    # traveler = models.ManyToManyField('Traveler', through=Traveler_Trip)
+    traveler_on_trip = models.ManyToManyField('Traveler' , through='TravelerTrip')
 
     class Meta:
         verbose_name = "trip"
