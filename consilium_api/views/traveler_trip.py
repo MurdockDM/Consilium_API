@@ -4,10 +4,11 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from .user import UserSerializer
+from .traveler import TravelerSerializer
 from consilium_api.models import TravelerTrip, Traveler, Trip
 
 class TravelerTripSerializer(serializers.HyperlinkedModelSerializer):
-    
+    traveler = TravelerSerializer(many=False)
     class Meta:
         model = TravelerTrip
         url = serializers.HyperlinkedIdentityField(
@@ -15,7 +16,7 @@ class TravelerTripSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'traveler', 'trip', 'created_trip')
-        depth = 1
+        depth = 2
 
 class TravelerTrips(ViewSet):
 
