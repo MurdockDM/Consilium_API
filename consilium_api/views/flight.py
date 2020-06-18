@@ -6,15 +6,16 @@ from rest_framework import status
 from consilium_api.models import Flight
 from .traveler import TravelerSerializer
 from .trip import TripSerializer
+
 class FlightSerializer(serializers.HyperlinkedModelSerializer):
 
     traveler = TravelerSerializer(many=False)
-    trip = TripSerializer(many=False)
+    
     class Meta:
         model = Flight
         url = serializers.HyperlinkedIdentityField(
-            view_name = 'flight',
-            lookup_field = 'id'
+            view_name='flight',
+            lookup_field='id'
         )
         fields = ('id', 'start_airport', 'destination_airport', 'arrival_time', 'traveler', 'trip')
         depth = 1
@@ -51,7 +52,7 @@ class Flights(ViewSet):
         flight.trip = request.data['trip']
         flight.save()
 
-        return Response({}, status.status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk=None):
         try:

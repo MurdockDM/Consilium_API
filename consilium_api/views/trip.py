@@ -13,6 +13,7 @@ from consilium_api.models import Trip, Friend, Traveler
 class TripSerializer(serializers.HyperlinkedModelSerializer):
 
     traveler_on_trip = TravelerSerializer(many=True)
+    
     class Meta:
         model = Trip
         url = serializers.HyperlinkedIdentityField(
@@ -20,7 +21,7 @@ class TripSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field = 'id'
         )
         fields = ('id', 'city', 'state', 'country', 'start_date', 'end_date', 'traveler_on_trip')
-        depth = 2
+        depth = 1
 
 class Trips(ViewSet):
 
