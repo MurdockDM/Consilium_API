@@ -4,10 +4,12 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from consilium_api.models import Flight
-
-
+from .traveler import TravelerSerializer
+from .trip import TripSerializer
 class FlightSerializer(serializers.HyperlinkedModelSerializer):
 
+    traveler = TravelerSerializer(many=False)
+    trip = TripSerializer(many=False)
     class Meta:
         model = Flight
         url = serializers.HyperlinkedIdentityField(
