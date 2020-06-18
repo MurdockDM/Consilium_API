@@ -10,11 +10,11 @@ class AccommodationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Accommodation
         url = serializers.HyperlinkedIdentityField(
-            view_name = 'accommodation',
-            lookup_field = 'id'
+            view_name='accommodation',
+            lookup_field='id'
         )
 
-        fields = ('id', 'name', 'address', 'city', 'state', 'check_in_date', 'checkout_date', 'capacity', 'booked', 'room' )
+        fields = ('id', 'name', 'address', 'city', 'state', 'check_in_date', 'checkout_date', 'capacity', 'booked', 'room', 'trip')
         depth = 1
 
 class Accommodations(ViewSet):
@@ -68,7 +68,7 @@ class Accommodations(ViewSet):
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
         except Accommodation.DoesNotExist as ex:
-            return Response({'message': ex.args[0]}, status=status.HTTP_404_NO_CONTENT)        
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)        
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         

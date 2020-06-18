@@ -20,7 +20,7 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from django.conf import settings
 from django.conf.urls.static import static
-from consilium_api.views import TravelerTrips,Travelers,Users,Accommodations,Rooms,Friends,Activities,Trips,Flights, register_user, login_user
+from consilium_api.views import *
 from consilium_api.models import *
 
 
@@ -34,6 +34,8 @@ router.register(r'travelertrips', TravelerTrips, 'travelertrips')
 router.register(r'friends', Friends, 'friend')
 router.register(r'flights', Flights, 'flight')
 router.register(r'activities', Activities, 'activity')
+# router.register(r'tripflights', TripFlights, 'tripflights')
+# router.register(r'tripaccommodations', TripAccommodations, 'tripaccommodations')
 
 urlpatterns = [
     path('', include(router.urls)),
