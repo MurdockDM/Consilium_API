@@ -17,8 +17,8 @@ class TripSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Trip
         url = serializers.HyperlinkedIdentityField(
-            view_name='trip',
-            lookup_field='id'
+            view_name = 'trip',
+            lookup_field = 'id'
         )
         fields = ('id', 'city', 'state', 'country', 'start_date', 'end_date', 'traveler_on_trip')
         depth = 1
