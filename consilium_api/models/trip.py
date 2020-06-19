@@ -9,7 +9,7 @@ class Trip(models.Model):
     country = models.CharField(max_length=150)
     start_date = models.DateField()
     end_date = models.DateField()
-    traveler_on_trip = models.ManyToManyField('Traveler' , through='TravelerTrip')
+    traveler_on_trip = models.ManyToManyField('Traveler', through='TravelerTrip')
     # flight = models.ManyToManyField('Flight', through='TripFlight')
     # accommodation = models.ManyToManyField('Accommodation', through='TripAccommodation')
     class Meta:

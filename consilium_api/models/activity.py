@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from .trip import Trip
 from .traveler import Traveler
 
@@ -16,3 +17,4 @@ class Activity(models.Model):
     class Meta:
         verbose_name = "activity"
         verbose_name_plural = "activities"
+        ordering = (F('trip').asc(), ('city'))
