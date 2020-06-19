@@ -3,11 +3,14 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from consilium_api.models import Activity
+from consilium_api.models import Activity, Traveler, Activity
+from .traveler import TravelerSerializer
 
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     """Takes related fields from models and translates between JSON format and database. """
+    
+    traveler = TravelerSerializer(many=False)
     class Meta:
         model = Activity
         url = serializers.HyperlinkedIdentityField(
@@ -68,7 +71,13 @@ class Activities(ViewSet):
 
     def list(self, request):
 
-        activities = Activity.objects.all()
+        youractivities = self.request.query_params.get('youractivities', None)
+
+        if youractivities is not None:
+            selftraveler = Traveler.objects.get(user = self.request.user)
+            activities = Activity.objects.filter(traveler = selftraveler,)
+        else:    
+            activities = Activity.objects.all()
 
         serializer = ActivitySerializer(
             activities, many=True, context={'request': request})
