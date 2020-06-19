@@ -15,7 +15,7 @@ class TravelerTripSerializer(serializers.HyperlinkedModelSerializer):
             view_name='traveler_trip',
             lookup_field='id'
         )
-        fields = ('id', 'traveler', 'trip', 'created_trip')
+        fields = ('id', 'traveler', 'trip', 'created_trip', 'trip_id')
         depth = 2
 
 class TravelerTrips(ViewSet):
@@ -25,9 +25,9 @@ class TravelerTrips(ViewSet):
         traveler = Traveler.objects.get(user_id=request.auth.user.id)
 
         new_traveler_trip = TravelerTrip()
-        new_traveler_trip.traveler_id = Traveler.objects.get(user_id=request.auth.user.id)
-        new_traveler_trip.trip_id = request.data['trip_id']  
-
+        new_traveler_trip.traveler_id = traveler.id
+        new_traveler_trip.trip_id = request.data['trip_id'] 
+        new_traveler_trip.created_trip = request.data['created_trip']
         new_traveler_trip.save()
 
         serializer = TravelerTripSerializer(new_traveler_trip, context={'request': request})
