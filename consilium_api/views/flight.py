@@ -3,7 +3,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from consilium_api.models import Flight
+from consilium_api.models import Flight, Traveler
 from .traveler import TravelerSerializer
 from .trip import TripSerializer
 
@@ -23,12 +23,14 @@ class FlightSerializer(serializers.HyperlinkedModelSerializer):
 class Flights(ViewSet):
 
     def create(self, request):
+        traveler = Traveler.objects.get(user_id=request.auth.user.id)
+
         new_flight = Flight()
         new_flight.start_airport = request.data['start_airport']
         new_flight.destination_airport = request.data['destination_airport']
         new_flight.arrival_time = request.data['arrival_time']
-        new_flight.traveler = request.data['traveler']
-        new_flight.trip = request.data['trip']
+        new_flight.traveler_id = traveler.id
+        new_flight.trip_id = request.data['trip_id']
         new_flight.save()
 
         serializer = FlightSerializer(new_flight, context={'request': request})
