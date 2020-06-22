@@ -14,7 +14,7 @@ class AccommodationSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
 
-        fields = ('id', 'name', 'address', 'city', 'state', 'check_in_date', 'checkout_date', 'capacity', 'booked', 'room', 'trip')
+        fields = ('id', 'name', 'address', 'city', 'state', 'checkin_date', 'checkout_date', 'capacity', 'booked', 'room', 'trip', 'room_id', 'trip_id')
         depth = 1
 
 class Accommodations(ViewSet):
@@ -25,12 +25,12 @@ class Accommodations(ViewSet):
         new_accommodation.address = request.data['address']
         new_accommodation.city = request.data['city']
         new_accommodation.state = request.data['state']
-        new_accommodation.check_in_date = request.data['check_in_date']
+        new_accommodation.checkin_date = request.data['checkin_date']
         new_accommodation.checkout_date = request.data['checkout_date']
         new_accommodation.capacity = request.data['capacity']
         new_accommodation.booked = request.data['booked']
-        new_accommodation.room = request.data['room']
-        new_accommodation.trip = request.data['trip']
+        new_accommodation.room_id = request.data['room_id']
+        new_accommodation.trip_id = request.data['trip_id']
         new_accommodation.save()
 
         serializer = AccommodationSerializer(new_accommodation, context={'request': request})
@@ -51,12 +51,12 @@ class Accommodations(ViewSet):
         accommodation.address = request.data['address']
         accommodation.city = request.data['city']
         accommodation.state = request.data['state']
-        accommodation.check_in_date = request.data['check_in_date']
+        accommodation.checkin_date = request.data['checkin_date']
         accommodation.checkout_date = request.data['checkout_date']
         accommodation.capacity = request.data['capacity']
         accommodation.booked = request.data['booked']
-        accommodation.room = request.data['room']
-        accommodation.trip = request.data['trip']
+        accommodation.room_id = request.data['room_id']
+        accommodation.trip_id = request.data['trip_id']
         accommodation.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -77,7 +77,7 @@ class Accommodations(ViewSet):
         accommodations = Accommodation.objects.all()
 
         serializer = AccommodationSerializer(accommodations, many=True, context={'request': request}) 
-        return Response(serializer.data)   
+        return Response(serializer.data)
         
         
         

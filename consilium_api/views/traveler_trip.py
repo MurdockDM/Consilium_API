@@ -26,7 +26,7 @@ class TravelerTrips(ViewSet):
 
         new_traveler_trip = TravelerTrip()
         new_traveler_trip.traveler_id = traveler.id
-        new_traveler_trip.trip_id = request.data['trip_id'] 
+        new_traveler_trip.trip_id = request.data['trip_id']
         new_traveler_trip.created_trip = request.data['created_trip']
         new_traveler_trip.save()
 
