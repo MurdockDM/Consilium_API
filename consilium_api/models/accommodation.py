@@ -9,7 +9,7 @@ class Accommodation(models.Model):
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=50)
-    check_in_date = models.DateField(null=True, blank=True)
+    checkin_date = models.DateField(null=True, blank=True)
     checkout_date = models.DateField(null=True, blank=True)
     capacity = models.IntegerField(null=True, blank=True)
     booked = models.BooleanField()
@@ -17,4 +17,4 @@ class Accommodation(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = (F('trip').asc(), ('check_in_date'))
+        ordering = (F('trip').asc(), ('checkin_date'))
