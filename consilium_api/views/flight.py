@@ -17,7 +17,7 @@ class FlightSerializer(serializers.HyperlinkedModelSerializer):
             view_name='flight',
             lookup_field='id'
         )
-        fields = ('id', 'start_airport', 'destination_airport', 'arrival_time', 'traveler', 'trip')
+        fields = ('id', 'start_airport', 'destination_airport', 'arrival_time', 'traveler', 'trip', 'trip_id', 'traveler_id')
         depth = 1
 
 class Flights(ViewSet):
