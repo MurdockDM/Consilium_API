@@ -17,7 +17,7 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
             view_name='activity',
             lookup_field='id'
         )
-        fields = ('id', 'name', 'address', 'city', 'state', 'trip', 'traveler')
+        fields = ('id', 'name', 'address', 'city', 'state', 'trip', 'traveler', 'trip_id', 'traveler_id')
         depth = 1
 
 
@@ -25,12 +25,13 @@ class Activities(ViewSet):
     """Methods used to act upon database for Activity database table. """
     def create(self, request):
         new_activity = Activity()
+        traveler = Traveler.objects.get(user_id=request.auth.user.id)
         new_activity.name = request.data['name']
         new_activity.address = request.data['address']
         new_activity.city = request.data['city']
         new_activity.state = request.data['state']
-        new_activity.trip = request.data['trip']
-        new_activity.traveler = request.data['traveler']
+        new_activity.trip_id = request.data['trip_id']
+        new_activity.traveler_id = traveler.id
         new_activity.save()
 
         serializer = ActivitySerializer(new_activity, context={'request': request})
@@ -47,13 +48,14 @@ class Activities(ViewSet):
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
+        traveler = Traveler.objects.get(user_id=request.auth.user.id)
         activity = Activity.objects.get(pk=pk)
         activity.name = request.data['name']
         activity.address = request.data['address']
         activity.city = request.data['city']
         activity.state = request.data['state']
-        activity.trip = request.data['trip']
-        activity.traveler = request.data['traveler']
+        activity.trip_id = request.data['trip_id']
+        activity.traveler_id = traveler.id
         activity.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
