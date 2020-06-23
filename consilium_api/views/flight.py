@@ -17,7 +17,7 @@ class FlightSerializer(serializers.HyperlinkedModelSerializer):
             view_name='flight',
             lookup_field='id'
         )
-        fields = ('id', 'start_airport', 'destination_airport', 'arrival_time', 'traveler', 'trip')
+        fields = ('id', 'start_airport', 'destination_airport', 'arrival_time', 'traveler', 'trip', 'trip_id', 'traveler_id')
         depth = 1
 
 class Flights(ViewSet):
@@ -46,12 +46,13 @@ class Flights(ViewSet):
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
+        traveler = Traveler.objects.get(user_id=request.auth.user.id)
         flight = Flight.objects.get(pk=pk)
         flight.start_airport = request.data['start_airport']
         flight.destination_airport = request.data['destination_airport']
         flight.arrival_time = request.data['arrival_time']
-        flight.traveler = request.data['traveler']
-        flight.trip = request.data['trip']
+        flight.traveler_id = traveler.id
+        flight.trip_id = request.data['trip_id']
         flight.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -69,13 +70,14 @@ class Flights(ViewSet):
 
     def list(self, request):
 
-        flights = Flight.objects.all()
+        yourflights = self.request.query_params.get('yourflights', None)
+
+        if yourflights is not None:
+            user = self.request.user
+            traveler = Traveler.objects.get(user_id=user.id)
+            flights = Flight.objects.filter(traveler_id=traveler.id)
+        else:
+            flights = Flight.objects.all()
 
         serializer = FlightSerializer(flights, many=True, context={'request': request})
-        return Response(serializer.data)             
-        
-        
-        
-                            
-        
-                
+        return Response(serializer.data)

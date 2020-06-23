@@ -71,7 +71,7 @@ class Trips(ViewSet):
 
     def list(self, request):
 
-        
+        onlyyourtrips = self.request.query_params.get('onlyyourtrips', None)
         notyourtrips = self.request.query_params.get('notyourtrips', None)
         friendstrips = self.request.query_params.get('friendstrips', None)
         
@@ -85,6 +85,10 @@ class Trips(ViewSet):
             user = self.request.user
             traveler = Traveler.objects.get(user_id=user.id)
             all_trips = Trip.objects.exclude(traveler_on_trip=traveler)
+        elif onlyyourtrips is not None:
+            user = self.request.user
+            traveler = Traveler.objects.get(user_id=user.id)
+            all_trips = Trip.objects.filter(traveler_on_trip=traveler)    
         else:
             all_trips = Trip.objects.all()    
         
