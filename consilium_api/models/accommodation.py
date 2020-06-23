@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import F
 from .room import Room
 from .trip import Trip
+from .traveler import Traveler
 
 class Accommodation(models.Model):
 
@@ -13,8 +14,9 @@ class Accommodation(models.Model):
     checkout_date = models.DateField(null=True, blank=True)
     capacity = models.IntegerField(null=True, blank=True)
     booked = models.BooleanField()
-    room = models.ForeignKey(Room, on_delete=models.PROTECT, null=True, blank=True)
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, blank=True)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    traveler = models.ForeignKey(Traveler, on_delete=models.CASCADE)
 
     class Meta:
         ordering = (F('trip').asc(), ('checkin_date'))
