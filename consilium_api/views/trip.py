@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework import status
 from .user import UserSerializer
 from .traveler import TravelerSerializer
-from consilium_api.models import Trip, Friend, Traveler
+from consilium_api.models import Trip, Friend, Traveler, TravelerTrip
 
 
 
@@ -74,13 +74,14 @@ class Trips(ViewSet):
         onlyyourtrips = self.request.query_params.get('onlyyourtrips', None)
         notyourtrips = self.request.query_params.get('notyourtrips', None)
         friendstrips = self.request.query_params.get('friendstrips', None)
-        
+        friendstravelertrips = self.request.query_params.get('friendstravelertrips')
+        tripsjoinedandyours = self.request.query_params.get('tripsjoinedandyours')
 
         if friendstrips is not None:
             user = self.request.user
             traveler = Traveler.objects.get(user_id = user.id)
             friends = Friend.objects.filter(current_user=traveler, request_accepted=True)
-            all_trips = Trip.objects.filter(traveler_on_trip__id__in = friends)
+            all_trips = Trip.objects.exclude()
         elif notyourtrips is not None:
             user = self.request.user
             traveler = Traveler.objects.get(user_id=user.id)
@@ -88,7 +89,15 @@ class Trips(ViewSet):
         elif onlyyourtrips is not None:
             user = self.request.user
             traveler = Traveler.objects.get(user_id=user.id)
-            all_trips = Trip.objects.filter(traveler_on_trip=traveler)    
+            all_trips = Trip.objects.filter(traveler_on_trip=traveler)
+        elif friendstravelertrips is not None:
+            user = self.request.user
+            traveler = Traveler.objects.get(user_id = user.id)
+            all_trips = Trip.objects.exclude(travelertrip__traveler_id=traveler.id)
+        elif tripsjoinedandyours is not None:
+            user = self.request.user
+            traveler = Traveler.objects.get(user_id = user.id)
+            all_trips = Trip.objects.filter(travelertrip__traveler_id=traveler.id)
         else:
             all_trips = Trip.objects.all()    
         

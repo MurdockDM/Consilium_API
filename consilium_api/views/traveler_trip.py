@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework import status
 from .user import UserSerializer
 from .traveler import TravelerSerializer
-from consilium_api.models import TravelerTrip, Traveler, Trip
+from consilium_api.models import TravelerTrip, Traveler, Trip, Friend
 
 class TravelerTripSerializer(serializers.HyperlinkedModelSerializer):
     traveler = TravelerSerializer(many=False)
@@ -15,7 +15,7 @@ class TravelerTripSerializer(serializers.HyperlinkedModelSerializer):
             view_name='traveler_trip',
             lookup_field='id'
         )
-        fields = ('id', 'traveler', 'trip', 'created_trip', 'trip_id')
+        fields = ('id', 'traveler', 'trip', 'created_trip', 'traveler_id', 'trip_id')
         depth = 2
 
 class TravelerTrips(ViewSet):
@@ -36,9 +36,12 @@ class TravelerTrips(ViewSet):
     def list(self, request):
 
         yourtrips = self.request.query_params.get('yourtrips', None)
+        tripsjoined = self.request.query_params.get('tripsjoined', None)
+        possibletrips = self.request.query_params.get('possibletrips', None)
+        friendstravelertrips = self.request.query_params.get('friendstravelertrips')
 
         if yourtrips is not None:
-            traveler = Traveler.objects.get(user = self.request.user)
+            traveler = Traveler.objects.get(user=self.request.user)
             traveler_trips = TravelerTrip.objects.filter(traveler_id = traveler, created_trip=True)
         else:
             traveler_trips = TravelerTrip.objects.all()
