@@ -77,29 +77,22 @@ class Trips(ViewSet):
         friendstravelertrips = self.request.query_params.get('friendstravelertrips')
         tripsjoinedandyours = self.request.query_params.get('tripsjoinedandyours')
 
+        user = self.request.user
+        traveler = Traveler.objects.get(user_id = user.id)
+        
         if friendstrips is not None:
-            user = self.request.user
-            traveler = Traveler.objects.get(user_id = user.id)
             friends = Friend.objects.filter(current_user=traveler, request_accepted=True)
             all_trips = Trip.objects.exclude()
         elif notyourtrips is not None:
-            user = self.request.user
-            traveler = Traveler.objects.get(user_id=user.id)
             all_trips = Trip.objects.exclude(traveler_on_trip=traveler)
         elif onlyyourtrips is not None:
-            user = self.request.user
-            traveler = Traveler.objects.get(user_id=user.id)
             all_trips = Trip.objects.filter(traveler_on_trip=traveler)
         elif friendstravelertrips is not None:
-            user = self.request.user
-            traveler = Traveler.objects.get(user_id = user.id)
             all_trips = Trip.objects.exclude(travelertrip__traveler_id=traveler.id)
         elif tripsjoinedandyours is not None:
-            user = self.request.user
-            traveler = Traveler.objects.get(user_id = user.id)
             all_trips = Trip.objects.filter(travelertrip__traveler_id=traveler.id)
         else:
-            all_trips = Trip.objects.all()    
+            all_trips = Trip.objects.all()
         
         serializer = TripSerializer(all_trips, many=True, context={'request': request})
         return Response(serializer.data)            
